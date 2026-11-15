@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# test - shellcheck and the bats tests of repos (throw-away repos only); no arguments.
+set -eu
+cd "$(dirname "$(readlink -f "$0")")"
+[ $# -eq 0 ] || { echo "test: takes no arguments" >&2; exit 2; }
+command -v bats > /dev/null || { echo "test: bats is missing (pacman -S bats)" >&2; exit 2; }
+if command -v shellcheck > /dev/null; then shellcheck -S warning repos install test; else echo "test: shellcheck missing, lint skipped" >&2; fi
+exec bats tests/repos.bats

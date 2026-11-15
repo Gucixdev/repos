@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# install - put `repos` in $PREFIX/bin (default ~/.local); no arguments, no root. DESTDIR is for packagers.
+set -eu
+cd "$(dirname "$(readlink -f "$0")")"
+[ $# -eq 0 ] || { echo "install: takes no arguments (PREFIX=... in the environment changes the target)" >&2; exit 2; }
+prefix=${PREFIX:-$HOME/.local}
+dest=${DESTDIR:-}$prefix/bin
+install -d "$dest"
+install -m 755 repos "$dest/repos"
+echo "repos installed: $dest/repos"
+case ":$PATH:" in
+	*":$prefix/bin:"*) ;;
+	*) [ -n "${DESTDIR:-}" ] || echo "note: $prefix/bin is not in PATH" ;;
+esac
