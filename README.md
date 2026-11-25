@@ -4,12 +4,14 @@ One bash file that keeps the git repos of a folder in step with GitHub: what cha
 behind, pull, push, and a place for the cases that need a human.
 
     ./install            # repos -> ~/.local/bin (PREFIX, DESTDIR respected)
-    repos                # status of every repo in ~/src (REPOS_ROOT changes the folder)
+    repos                # status of every repo in your repos folder
     repos fetch          # git fetch --all everywhere, read only
     repos pull frost     # one repo, or several names, or none = all; -i picks with fzf
     repos push -y        # shows the plan, asks once, pushes what is ahead
     repos needmerge      # what is waiting in needmerge/* branches
     repos merge frost    # merge needmerge/<branch> into the current branch
+
+The repos folder is `$REPOS_ROOT`, else the line in `~/.config/repos/root`, else `~/src`.
 
 ## The rule behind `needmerge`
 

@@ -14,7 +14,8 @@
 #
 #   -i  choose the repos with fzf (a numbered list without it)      -y  answer yes
 #   -n  dry run: say what would happen (fetch still runs, it only reads)
-#   No NAME means every repo. A NAME is a folder of $REPOS_ROOT (default ~/src) that has a .git.
+#   No NAME means every repo. A NAME is a folder of the repos folder that has a .git: $REPOS_ROOT, else the line
+#   in ~/.config/repos/root, else ~/src.
 #
 # Safe by construction: no force push, no reset, no branch or file is deleted, a changed working tree is never touched,
 # a pull that cannot fast-forward only adds a branch. A fetch or push that hangs is cut after 25 s and tried once more
@@ -22,7 +23,7 @@
 set -u
 case ${1:-} in -h | --help) awk 'NR == 1 { next } /^#/ { sub(/^# ?/, ""); print; next } { exit }' "$0"; exit 0 ;; esac
 
-root=${REPOS_ROOT:-~/src}
+root=${REPOS_ROOT:-$(cat "${XDG_CONFIG_HOME:-$HOME/.config}/repos/root" 2> /dev/null || echo "$HOME/src")}
 yes=0 dry=0 pick=0 rc=0
 export GIT_TERMINAL_PROMPT=0
 : "${GIT_SSH_COMMAND:=ssh -o BatchMode=yes -o ConnectTimeout=15}"
